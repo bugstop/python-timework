@@ -1,5 +1,10 @@
 # timework
 
+[![python](https://img.shields.io/badge/python-3-blue)](https://www.python.org)
+[![Build Status](https://travis-ci.org/bugstop/timework-pylib.svg?branch=master)](https://travis-ci.org/bugstop/timework-pylib)
+[![Coverage Status](https://coveralls.io/repos/github/bugstop/timework-pylib/badge.svg?branch=master)](https://coveralls.io/github/bugstop/timework-pylib?branch=master)
+[![codebeat badge](https://codebeat.co/badges/3d301de4-a88c-4a8a-9712-373fab3126e4)](https://codebeat.co/projects/github-com-bugstop-timework-pylib-master)
+
 A package used to set time limits.
 
 ## Install
