@@ -1,4 +1,4 @@
-import timework as tw
+from . import timework as tw
 
 
 def assert_timer(e):
@@ -8,7 +8,7 @@ def assert_timer(e):
 @tw.timer(out=assert_timer)
 def timer_demo():
     i = 0
-    while True:
+    while i < 5000:
         i += 1
 
 
@@ -21,9 +21,9 @@ def limit_demo():
 
 @tw.progressive(2)
 def progressive_demo(i, max_depth):
-    while i < max_depth:
+    for _ in range(max_depth):
         i += 1
-    return max_depth + i
+    return i
 
 
 def test_timer():
@@ -39,22 +39,22 @@ def test_limit():
 
 def test_progressive1():
     try:
-        progressive_demo(max_depth=10)
+        progressive_demo(5, max_depth=100)
     except Exception as e:
         rc = str(e)
-        assert int(rc) == 20
+        assert int(rc) == 105
 
 
 def test_progressive2():
     try:
-        progressive_demo(max_depth=10 ** 6)
+        progressive_demo(0, max_depth=10**9)
     except Exception as e:
         rc = str(e)
-        assert int(rc) > 10 ** 6
+        assert rc.isdigit()
 
 
 def test_progressive3():
     try:
-        progressive_demo(max_depth='i')
+        progressive_demo(0, max_depth='i')
     except Exception as e:
         assert isinstance(e, BaseException)

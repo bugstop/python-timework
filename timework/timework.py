@@ -1,7 +1,7 @@
-from threading import Thread
-import functools
 import time
 import logging
+import functools
+from threading import Thread
 
 
 def timer(out=logging.info):
@@ -59,7 +59,8 @@ def progressive(timeout):
             @limit(timeout)
             def new_func():
                 nonlocal result
-                for depth in range(kwargs['max_depth']):
+                max_d = kwargs.pop('max_depth')
+                for depth in range(max_d + 1):
                     try:
                         result = func(*args, max_depth=depth, **kwargs)
                     except Exception as err_a:
@@ -68,7 +69,9 @@ def progressive(timeout):
             try:
                 new_func()
             except Exception as _:
-                raise Exception(result)
+                pass
+
+            raise Exception(result)
 
         return wrapper
 

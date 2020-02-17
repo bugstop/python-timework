@@ -10,7 +10,7 @@ A package used to set time limits.
 ## Install
 
 ```
-pip install timework
+pip install timework==0.0.2
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ import timework as tw
 @tw.timer(out=print)
 def timer_demo():
     i = 0
-    while True:
+    while i < 5000:
         i += 1
 
 
@@ -35,9 +35,9 @@ def limit_demo():
 
 @tw.progressive(timeout=2)
 def progressive_demo(i, max_depth):
-    while i < max_depth:
+    for _ in range(max_depth):
         i += 1
-    return max_depth + i
+    return i
    
    
 timer_demo()
@@ -48,7 +48,7 @@ except Exception as e:
 	print(e)
 
 try:
-	progressive_demo(max_depth=10)
+	progressive_demo(5, max_depth=10)
 except Exception as e:
 	rc = str(e)
 	print(rc)
