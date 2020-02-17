@@ -1,4 +1,5 @@
 from __future__ import absolute_import
-from timework import *
+from .timework import *
 
-name = 'timework'
+__name__ = 'timework'
+__version__ = '0.0.3'

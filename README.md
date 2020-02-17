@@ -10,7 +10,7 @@ A package used to set time limits.
 ## Install
 
 ```
-pip install timework==0.0.2
+pip install timework
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ import timework as tw
 @tw.timer(out=print)
 def timer_demo():
     i = 0
-    while i < 5000:
+    while i < 2 ** 25:
         i += 1
 
 
@@ -38,22 +38,27 @@ def progressive_demo(i, max_depth):
     for _ in range(max_depth):
         i += 1
     return i
-   
-   
+
+
 timer_demo()
 
 try:
-	limit_demo()
+    limit_demo()
 except Exception as e:
-	print(e)
+    print(e)
 
 try:
-	progressive_demo(5, max_depth=10)
+    progressive_demo(5, max_depth=10)
 except Exception as e:
-	rc = str(e)
-	print(rc)
+    rc = str(e)
+    print(rc)
+```
+```
+time used: 1.98166 seconds
+limit_demo: 1.5 seconds exceeded
+15
 ```
 
 ## License
 
-MIT © bugstop 
+MIT © <a href="https://github.com/bugstop" style="color:black;text-decoration: none !important;">bugstop</a>
