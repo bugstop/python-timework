@@ -28,7 +28,7 @@ def iterative_demo(max_depth):
 
 
 def test_timer():
-    r.clean()
+    r.clear()
     timer_demo(10)
     timer_demo(25)
     assert len(r.value) == 2
@@ -55,7 +55,7 @@ def test_limit_b():
 
 def test_iterative_a():
     try:
-        r.clean()
+        r.clear()
         iterative_demo(max_depth=4)
     except Exception as e:
         assert isinstance(e, BaseException)
@@ -67,7 +67,7 @@ def test_iterative_a():
 
 def test_iterative_b():
     try:
-        r.clean()
+        r.clear()
         iterative_demo(max_depth=30)
     except Exception as e:
         assert isinstance(e, BaseException)

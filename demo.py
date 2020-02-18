@@ -64,7 +64,7 @@ else:
     print(s)
 
 try:
-    r.clean()
+    r.clear()
     iterative_demo_a(max_depth=10)
 except Exception as e:
     print(e)
@@ -72,7 +72,7 @@ finally:
     print(r.value, end='\n\n')
 
 try:
-    r.clean()
+    r.clear()
     iterative_demo_a(max_depth=25)
 except Exception as e:
     print(e)

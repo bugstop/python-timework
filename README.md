@@ -21,7 +21,11 @@ import timework as tw
 import logging
 
 r = tw.ResultHandler(5)
+```
 
+### timework.timer
+
+```python
 @tw.timer(r)
 def timer_demo_a():
     i = 0
@@ -42,27 +46,30 @@ def timer_demo_c():
     while i < 2 ** 25:
         i += 1
     return i
+```
+```python
+timer_demo_a()
+timer_demo_b()
+timer_demo_c()
+print(r.value)
+```
+```
+timer_demo_b: 0.991348 seconds used
+WARNING:root:timer_demo_c: 1.96977 seconds used
+deque([0.5051665306091309, 0.9913477897644043, 1.96976900100708], maxlen=5)
+```
 
+### timework.limit
+
+```python
 @tw.limit(3)
 def limit_demo(m):
     i = 0
     while i < 2 ** m:
         i += 1
     return i
-
-@tw.iterative(r, 1)
-def iterative_demo(max_depth):
-    i = 0
-    while i < 2 ** max_depth:
-        i += 1
-    return max_depth, i
-
-
-timer_demo_a()
-timer_demo_b()
-timer_demo_c()
-print(r.value, end='\n\n')
-
+```
+```python
 try:
     s = limit_demo(4)
 except Exception as e:
@@ -76,9 +83,25 @@ except Exception as e:
     print(e, end='\n\n')
 else:
     print(s)
+```
+```
+16
+limit_demo: 3 seconds exceeded
+```
 
+### timework.iterative
+
+```python
+@tw.iterative(r, 1)
+def iterative_demo(max_depth):
+    i = 0
+    while i < 2 ** max_depth:
+        i += 1
+    return max_depth, i
+```
+```python
 try:
-    r.clean()
+    r.clear()
     iterative_demo(max_depth=10)
 except Exception as e:
     print(e)
@@ -86,29 +109,18 @@ finally:
     print(r.value, end='\n\n')
 
 try:
-    r.clean()
+    r.clear()
     iterative_demo(max_depth=25)
 except Exception as e:
     print(e)
 finally:
     print(r.value, end='\n\n')
-
 ```
 ```
-timer_demo_b: 0.991348 seconds used
-WARNING:root:timer_demo_c: 1.96977 seconds used
-deque([0.5051665306091309, 0.9913477897644043, 1.96976900100708], maxlen=5)
-
-16
-limit_demo: 3 seconds exceeded
-
 deque([(6, 64), (7, 128), (8, 256), (9, 512), (10, 1024)], maxlen=5)
 
 iterative_deepening: 1 seconds exceeded
 deque([(15, 32768), (16, 65536), (17, 131072), (18, 262144), (19, 524288)], maxlen=5)
-
-
-Process finished with exit code 0
 ```
 
 ## License

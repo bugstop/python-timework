@@ -5,7 +5,6 @@ from collections import deque
 
 
 class ResultHandler:
-
     def __init__(self, history=None):
         self.value = deque(maxlen=history)
 
@@ -14,7 +13,7 @@ class ResultHandler:
         if out:
             method(string)
 
-    def clean(self):
+    def clear(self):
         self.value.clear()
 
 
