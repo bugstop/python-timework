@@ -3,7 +3,7 @@ from . import timework as tw
 from random import randint
 
 
-@tw.timer(output=print)
+@tw.timer(print, detail=True)
 def timer_demo_a(m):
     i = 0
     while i < 2 ** m:
@@ -13,6 +13,14 @@ def timer_demo_a(m):
 
 @tw.timer(timeout=1)
 def timer_demo_b(m):
+    i = 0
+    while i < 2 ** m:
+        i += 1
+    return i
+
+
+@tw.timer(timeout=-1)
+def timer_demo_c(m):
     i = 0
     while i < 2 ** m:
         i += 1
@@ -60,6 +68,18 @@ def test_timer_b():
             assert e.result == 2 ** d
         else:
             assert c == 2 ** d
+
+
+def test_timer_c():
+    for _ in range(10):
+        t = -1
+        d = randint(10, 25)
+        try:
+            timer_demo_c(d)
+        except tw.TimeError as e:
+            t = e.result
+        finally:
+            assert t == 2 ** d
 
 
 def test_limit():

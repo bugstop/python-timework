@@ -10,13 +10,35 @@ class Error(Exception):
 
 
 class TimeError(Error):
+    """Class for timeout."""
+
     def __init__(self, message, result=None, detail=None):
+        """
+        :param message: error message
+        :param result: result of the inner function
+        :param detail: more information (if have)
+        """
         self.message = message
         self.result = result
         self.detail = detail
 
 
-def timer(output=None, *, detail=None, timeout=0):
+def timer(output=None, *, detail=False, timeout=0):
+    """
+    Decorator. Measure the running time.
+
+    :param output: a function object, e.g. print, None to be silent
+    :param detail: boolean, True to print start and stop time
+    :param timeout: if run time > timeout, then raise error
+                     (after inner function finished)
+                     0 is never, -1 is always
+
+    :return: result of the inner function
+
+    :exception TimeError object contains timeout message and
+                                          the result of the inner function.
+    """
+
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -47,6 +69,15 @@ def timer(output=None, *, detail=None, timeout=0):
 
 
 def limit(timeout):
+    """
+    Decorator. Limit the running time.
+
+    :param timeout: run time limit (seconds)
+    :return: result of the inner function (if finished in time)
+
+    :exception TimeError object contains timeout message.
+    """
+
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -76,6 +107,20 @@ def limit(timeout):
 
 
 def iterative(timeout, key='max_depth', history=1):
+    """
+    Decorator. Used to do iterative deepening.
+    Notice: please use keyword arguments (at least 'max_depth')
+            when calling the inner function.
+
+    :param timeout: run time limit (seconds)
+    :param key: variable name of the maximum depth
+    :param history: maximum queue length
+    :return: result of the inner function (goal node is found)
+
+    :exception: TimeError object contains timeout message,
+                                           current result and previous results.
+    """
+
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
