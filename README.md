@@ -1,5 +1,6 @@
 # timework
 
+[![PyPI](https://img.shields.io/pypi/v/timework)](https://pypi.org/project/timework/)
 [![python](https://img.shields.io/badge/python-3-blue)](https://www.python.org)
 [![Build Status](https://travis-ci.org/bugstop/timework-pylib.svg?branch=master)](https://travis-ci.org/bugstop/timework-pylib)
 [![Coverage Status](https://coveralls.io/repos/github/bugstop/timework-pylib/badge.svg?branch=master)](https://coveralls.io/github/bugstop/timework-pylib?branch=master)
@@ -17,46 +18,97 @@ pip install timework
 
 ```python
 import timework as tw
+import logging
 
+r = tw.ResultHandler()
 
-@tw.timer(out=print)
-def timer_demo():
+@tw.timer(r)
+def timer_demo_a():
     i = 0
-    while i < 2 ** 25:
-        i += 1
-
-
-@tw.limit(timeout=1.5)
-def limit_demo():
-    i = 0
-    while True:
-        i += 1
-
-
-@tw.progressive(timeout=2)
-def progressive_demo(i, max_depth):
-    for _ in range(max_depth):
+    while i < 2 ** 23:
         i += 1
     return i
 
+@tw.timer(r, out=print)
+def timer_demo_b():
+    i = 0
+    while i < 2 ** 24:
+        i += 1
+    return i
 
-timer_demo()
+@tw.timer(r, out=logging.warning)
+def timer_demo_c():
+    i = 0
+    while i < 2 ** 25:
+        i += 1
+    return i
+
+@tw.limit(3)
+def limit_demo(m):
+    i = 0
+    while i < 2 ** m:
+        i += 1
+    return i
+
+@tw.iterative(r, 1)
+def iterative_demo(max_depth):
+    i = 0
+    while i < 2 ** max_depth:
+        i += 1
+    return max_depth, i
+
+
+timer_demo_a()
+timer_demo_b()
+timer_demo_c()
+print(r.value, end='\n\n')
 
 try:
-    limit_demo()
+    s = limit_demo(4)
+except Exception as e:
+    print(e, end='\n\n')
+else:
+    print(s)
+
+try:
+    s = limit_demo(30)
+except Exception as e:
+    print(e, end='\n\n')
+else:
+    print(s)
+
+try:
+    r.clean()
+    iterative_demo(max_depth=10)
 except Exception as e:
     print(e)
+finally:
+    print(r.value, end='\n\n')
 
 try:
-    progressive_demo(5, max_depth=10)
+    r.clean()
+    iterative_demo(max_depth=25)
 except Exception as e:
-    rc = str(e)
-    print(rc)
+    print(e)
+finally:
+    print(r.value, end='\n\n')
+
 ```
 ```
-time used: 1.98166 seconds
-limit_demo: 1.5 seconds exceeded
-15
+timer_demo_b: 0.990397 seconds used
+WARNING:root:timer_demo_c: 1.96071 seconds used
+[0.49068570137023926, 0.9903974533081055, 1.9607088565826416]
+
+16
+limit_demo: 3 seconds exceeded
+
+[(1, 2), (2, 4), (3, 8), (4, 16), (5, 32), (6, 64), (7, 128), (8, 256), (9, 512), (10, 1024)]
+
+iterative_deepening: 1 seconds exceeded
+[(1, 2), (2, 4), (3, 8), (4, 16), (5, 32), (6, 64), (7, 128), (8, 256), (9, 512), (10, 1024), (11, 2048), (12, 4096), (13, 8192), (14, 16384), (15, 32768), (16, 65536), (17, 131072), (18, 262144), (19, 524288)]
+
+
+Process finished with exit code 0
 ```
 
 ## License

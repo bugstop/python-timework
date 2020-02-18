@@ -1,60 +1,77 @@
 from . import timework as tw
 
-
-def assert_timer(e):
-    assert e[:10] == 'time used:'
+r = tw.ResultHandler()
 
 
-@tw.timer(out=assert_timer)
-def timer_demo():
+@tw.timer(r)
+def timer_demo(m):
     i = 0
-    while i < 5000:
-        i += 1
-
-
-@tw.limit(1.5)
-def limit_demo():
-    i = 0
-    while True:
-        i += 1
-
-
-@tw.progressive(2)
-def progressive_demo(i, max_depth):
-    for _ in range(max_depth):
+    while i < 2 ** m:
         i += 1
     return i
 
 
+@tw.limit(3)
+def limit_demo(m):
+    i = 0
+    while i < 2 ** m:
+        i += 1
+    return i
+
+
+@tw.iterative(r, 3)
+def iterative_demo(max_depth):
+    i = 0
+    while i < 2 ** max_depth:
+        i += 1
+    return max_depth, i
+
+
 def test_timer():
-    timer_demo()
+    r.clean()
+    timer_demo(10)
+    timer_demo(25)
+    assert len(r.value) == 2
+    assert r.value[0] < r.value[1]
 
 
-def test_limit():
+def test_limit_a():
     try:
-        limit_demo()
-    except Exception as e:
-        assert str(e)[:10] == 'limit_demo'
-
-
-def test_progressive1():
-    try:
-        progressive_demo(5, max_depth=100)
-    except Exception as e:
-        rc = str(e)
-        assert int(rc) == 105
-
-
-def test_progressive2():
-    try:
-        progressive_demo(0, max_depth=10**9)
-    except Exception as e:
-        rc = str(e)
-        assert rc.isdigit()
-
-
-def test_progressive3():
-    try:
-        progressive_demo(0, max_depth='i')
+        s = limit_demo(4)
     except Exception as e:
         assert isinstance(e, BaseException)
+    else:
+        assert s == 16
+
+
+def test_limit_b():
+    try:
+        s = limit_demo(30)
+    except Exception as e:
+        assert isinstance(e, BaseException)
+    else:
+        assert s == 2 ** 30
+
+
+def test_iterative_a():
+    try:
+        r.clean()
+        iterative_demo(max_depth=4)
+    except Exception as e:
+        assert isinstance(e, BaseException)
+    finally:
+        assert len(r.value) == 4
+        assert r.value[0] == (1, 2)
+        assert r.value[-1][0] == 4
+
+
+def test_iterative_b():
+    try:
+        r.clean()
+        iterative_demo(max_depth=30)
+    except Exception as e:
+        assert isinstance(e, BaseException)
+    finally:
+        assert len(r.value) < 30
+        assert r.value[0] == (1, 2)
+        assert r.value[2] == (3, 8)

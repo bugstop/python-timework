@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="timework",
-    version="0.0.3",
+    version="0.1.0",
     author="bugstop",
     author_email="pypi@isaacx.com",
     description="A package used to set time limits.",
