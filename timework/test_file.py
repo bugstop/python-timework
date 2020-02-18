@@ -3,7 +3,7 @@ from . import timework as tw
 from random import randint
 
 
-@tw.timer()
+@tw.timer(output=print)
 def timer_demo_a(m):
     i = 0
     while i < 2 ** m:
@@ -116,6 +116,11 @@ def test_errors():
         assert isinstance(e, KeyError)
 
     try:
-        limit_demo(max_depth='2')
+        iterative_demo_a(depth=2)
+    except Exception as e:
+        assert isinstance(e, KeyError)
+
+    try:
+        iterative_demo_a(max_depth='2')
     except Exception as e:
         assert isinstance(e, TypeError)
