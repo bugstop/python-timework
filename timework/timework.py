@@ -4,30 +4,42 @@ from threading import Thread
 from collections import deque
 
 
-class ResultHandler:
-    def __init__(self, history=None):
-        self.value = deque(maxlen=history)
-
-    def log(self, value, *, out=False, method=print, string=""):
-        self.value.append(value)
-        if out:
-            method(string)
-
-    def clear(self):
-        self.value.clear()
+class Error(Exception):
+    """Base class for exceptions in this module."""
+    pass
 
 
-def timer(handler: ResultHandler, *, out=None):
+class TimeError(Error):
+    def __init__(self, message, result=None, detail=None):
+        self.message = message
+        self.result = result
+        self.detail = detail
+
+
+def timer(output=None, *, detail=None, timeout=0):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
+            if output and detail:
+                t = time.asctime(time.localtime(time.time()))
+                output('START:  {}'.format(t))
             start = time.time()
-            func(*args, **kwargs)
+            rc = func(*args, **kwargs)
             end = time.time()
 
             used = end - start
-            s = "{}: {:g} seconds used".format(func.__name__, used)
-            handler.log(used, out=out, method=out, string=s)
+            s = '{}: {:g} seconds used'.format(func.__name__, used)
+
+            if timeout and used > timeout:
+                e = TimeError(s, rc, used)
+                raise e
+            elif output:
+                if detail:
+                    t = time.asctime(time.localtime(time.time()))
+                    output('FINISH: {}\n{}'.format(t, s))
+                else:
+                    output(s)
+            return rc
 
         return wrapper
 
@@ -38,53 +50,59 @@ def limit(timeout):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            rc = [Exception('{}: {:g} seconds exceeded'
-                            .format(func.__name__, timeout))]
+            rc = TimeError('{}: {:g} seconds exceeded'
+                           .format(func.__name__, timeout))
 
             def new_func():
+                nonlocal rc
                 try:
-                    rc[0] = func(*args, **kwargs)
-                except Exception as err_a:
-                    rc[0] = err_a
+                    rc = func(*args, **kwargs)
+                except Exception as err_:
+                    rc = err_
 
             t = Thread(target=new_func)
             t.daemon = True
-            try:
-                t.start()
-                t.join(timeout)
-            except Exception as err_b:
-                raise err_b
+            t.start()
+            t.join(timeout)
 
-            rt = rc[0]
-            if isinstance(rt, BaseException):
-                raise rt
+            if isinstance(rc, Exception):
+                raise rc
             else:
-                return rt
+                return rc
 
         return wrapper
 
     return decorator
 
 
-def iterative(handler: ResultHandler, timeout):
+def iterative(timeout, key='max_depth', history=1):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             @limit(timeout)
             def iterative_deepening():
                 result = None
-                max_d = kwargs.pop('max_depth')
+                max_d = kwargs.pop(key)
                 for depth in range(1, max_d + 1):
                     try:
-                        result = func(*args, max_depth=depth, **kwargs)
+                        kwargs[key] = depth
+                        result = func(*args, **kwargs)
                     except Exception as err_a:
                         result = err_a
                     finally:
-                        handler.log(result, out=False)
-
+                        handler.append(result)
                 return result
 
-            return iterative_deepening()
+            handler = deque(maxlen=history)
+            try:
+                rc = iterative_deepening()
+            except TimeError as e:
+                e.message = func.__name__ + '/' + e.message
+                e.result = handler[-1]
+                e.detail = handler
+                raise e
+            else:
+                return rc
 
         return wrapper
 

@@ -1,10 +1,8 @@
 import timework as tw
 import logging
 
-r = tw.ResultHandler(5)
 
-
-@tw.timer(r)
+@tw.timer(logging.warning)
 def timer_demo_a():
     i = 0
     while i < 2 ** 23:
@@ -12,7 +10,7 @@ def timer_demo_a():
     return i
 
 
-@tw.timer(r, out=print)
+@tw.timer(print, detail=True)
 def timer_demo_b():
     i = 0
     while i < 2 ** 24:
@@ -20,12 +18,22 @@ def timer_demo_b():
     return i
 
 
-@tw.timer(r, out=logging.warning)
+@tw.timer(timeout=1)
 def timer_demo_c():
     i = 0
     while i < 2 ** 25:
         i += 1
     return i
+
+
+a = timer_demo_a()
+b = timer_demo_b()
+try:
+    c = timer_demo_c()
+except tw.TimeError as e:
+    print('error:', e.message)
+    c = e.result
+print(a, b, c)
 
 
 @tw.limit(3)
@@ -36,7 +44,22 @@ def limit_demo(m):
     return i
 
 
-@tw.iterative(r, 1)
+try:
+    s = limit_demo(4)
+except tw.TimeError as e:
+    print(e)
+else:
+    print('result:', s)
+
+try:
+    s = limit_demo(30)
+except tw.TimeError as e:
+    print(e)
+else:
+    print('result:', s)
+
+
+@tw.iterative(3)
 def iterative_demo_a(max_depth):
     i = 0
     while i < 2 ** max_depth:
@@ -44,37 +67,34 @@ def iterative_demo_a(max_depth):
     return max_depth, i
 
 
-timer_demo_a()
-timer_demo_b()
-timer_demo_c()
-print(r.value, end='\n\n')
+@tw.iterative(3, history=5, key='depth')
+def iterative_demo_b(depth):
+    i = 0
+    while i < 2 ** depth:
+        i += 1
+    return depth
+
 
 try:
-    s = limit_demo(4)
-except Exception as e:
-    print(e, end='\n\n')
+    s = iterative_demo_a(max_depth=10)
+except tw.TimeError as e:
+    print(e.message)
+    print(e.result, e.detail)
 else:
-    print(s)
+    print('result:', s)
 
 try:
-    s = limit_demo(30)
-except Exception as e:
-    print(e, end='\n\n')
+    s = iterative_demo_a(max_depth=25)
+except tw.TimeError as e:
+    print(e.message)
+    print(e.result, e.detail)
 else:
-    print(s)
+    print('result:', s)
 
 try:
-    r.clear()
-    iterative_demo_a(max_depth=10)
-except Exception as e:
-    print(e)
-finally:
-    print(r.value, end='\n\n')
-
-try:
-    r.clear()
-    iterative_demo_a(max_depth=25)
-except Exception as e:
-    print(e)
-finally:
-    print(r.value, end='\n\n')
+    s = iterative_demo_b(depth=25)
+except tw.TimeError as e:
+    print(e.message)
+    print(e.result, e.detail)
+else:
+    print('result:', s)
