@@ -1,7 +1,7 @@
 import timework as tw
 import logging
 
-r = tw.ResultHandler()
+r = tw.ResultHandler(5)
 
 
 @tw.timer(r)

@@ -20,7 +20,7 @@ pip install timework
 import timework as tw
 import logging
 
-r = tw.ResultHandler()
+r = tw.ResultHandler(5)
 
 @tw.timer(r)
 def timer_demo_a():
@@ -95,17 +95,17 @@ finally:
 
 ```
 ```
-timer_demo_b: 0.990397 seconds used
-WARNING:root:timer_demo_c: 1.96071 seconds used
-[0.49068570137023926, 0.9903974533081055, 1.9607088565826416]
+timer_demo_b: 0.991348 seconds used
+WARNING:root:timer_demo_c: 1.96977 seconds used
+deque([0.5051665306091309, 0.9913477897644043, 1.96976900100708], maxlen=5)
 
 16
 limit_demo: 3 seconds exceeded
 
-[(1, 2), (2, 4), (3, 8), (4, 16), (5, 32), (6, 64), (7, 128), (8, 256), (9, 512), (10, 1024)]
+deque([(6, 64), (7, 128), (8, 256), (9, 512), (10, 1024)], maxlen=5)
 
 iterative_deepening: 1 seconds exceeded
-[(1, 2), (2, 4), (3, 8), (4, 16), (5, 32), (6, 64), (7, 128), (8, 256), (9, 512), (10, 1024), (11, 2048), (12, 4096), (13, 8192), (14, 16384), (15, 32768), (16, 65536), (17, 131072), (18, 262144), (19, 524288)]
+deque([(15, 32768), (16, 65536), (17, 131072), (18, 262144), (19, 524288)], maxlen=5)
 
 
 Process finished with exit code 0

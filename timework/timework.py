@@ -1,12 +1,13 @@
 import time
 import functools
 from threading import Thread
+from collections import deque
 
 
 class ResultHandler:
 
-    def __init__(self):
-        self.value = []
+    def __init__(self, history=None):
+        self.value = deque(maxlen=history)
 
     def log(self, value, *, out=False, method=print, string=""):
         self.value.append(value)
@@ -14,7 +15,7 @@ class ResultHandler:
             method(string)
 
     def clean(self):
-        self.value = []
+        self.value.clear()
 
 
 def timer(handler: ResultHandler, *, out=None):
