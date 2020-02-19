@@ -25,12 +25,12 @@ import timework as tw
 
 **`timework.TimeError`** contains two parts:
 
-- `TimeError.message` ***string***
+- `TimeError.message` ***string,***
   \<*inner function name*\>: \<*time used*\> seconds used
 - `TimeError.result`
   result of the inner function
 
-**Notice:** In **`timework.timer`** decorator, `timeout` is used to raise a `Error` **after** the inner function finishes. 
+***Notice:*** In **`timework.timer`** decorator, `timeout` is used to raise a `Error` **after** the inner function finishes. 
 If you want to **stop** the function from running with a time limit, please use **`timework.limit`**.
 
 ```python
@@ -82,7 +82,7 @@ error: timer_demo_c: 1.9817 seconds used
 
 **`timework.TimeError`** only contains:
 
-- `TimeError.message` *string*
+- `TimeError.message` ***string,***
   \<*inner function name*\>: \<*timeout*\> seconds exceeded
 
 ```python
@@ -117,14 +117,14 @@ limit_demo: 3 seconds exceeded
 
 **`timework.TimeError`** contains three parts:
 
-- `TimeError.message` *string*
+- `TimeError.message` ***string,***
   \<*inner function name*\>.iterative_deepening: \<*timeout*\> seconds exceeded
 - `TimeError.result`
   result of the last level of the iterative deepening search
-- `TimeError.detail` *collections.deque*
+- `TimeError.detail` ***collections.deque,***
   results of the upper levels *(number of historical records is set at `history`)*
 
-**Notice:** Please make sure the **max-depth**-variable name is given at `key` <sup>(`key='max_depth'` by default)</sup> and its value should be an **integer**.
+***Notice:*** Please make sure the **max-depth**-variable is an **integer** and its name is given at `key`.<sup>(`key='max_depth'` by default)</sup>
 
 ```python
 @tw.iterative(3)
@@ -176,4 +176,4 @@ iterative_demo_b.iterative_deepening: 3 seconds exceeded
 
 ## License
 
-MIT © <a href="https://github.com/bugstop" style="color:black;text-decoration: none !important;">bugstop</a>
+MIT © <a href="https://github.com/bugstop" style="color: black !important;text-decoration: none !important;">bugstop</a>
