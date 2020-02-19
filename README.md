@@ -1,13 +1,13 @@
 # timework
 
-[![PyPI](https://img.shields.io/pypi/v/timework)](https://pypi.org/project/timework/)
-[![Build Status](https://travis-ci.org/bugstop/timework-pylib.svg?branch=master)](https://travis-ci.org/bugstop/timework-pylib)
-[![Coverage Status](https://coveralls.io/repos/github/bugstop/timework-pylib/badge.svg?branch=master)](https://coveralls.io/github/bugstop/timework-pylib?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c659ee01edaf404cbb346dbac8cefe38)](https://www.codacy.com/manual/bugstop/timework-pylib?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bugstop/timework-pylib&amp;utm_campaign=Badge_Grade)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/timework)](https://www.python.org)
-[![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-red)](https://github.com/bugstop/timework-pylib)
+[![PyPI](https://img.shields.io/pypi/v/timework?style=flat)](https://pypi.org/project/timework/)
+[![Build Status](https://travis-ci.org/bugstop/timework-timeout-decorator.svg?branch=master;style=flat)](https://travis-ci.org/bugstop/timework-timeout-decorator)
+[![Coverage Status](https://coveralls.io/repos/github/bugstop/timework-timeout-decorator/badge.svg?branch=master;style=flat)](https://coveralls.io/github/bugstop/timework-timeout-decorator?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c659ee01edaf404cbb346dbac8cefe38)](https://www.codacy.com/manual/bugstop/timework-timeout-decorator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bugstop/timework-timeout-decorator&amp;utm_campaign=Badge_Grade)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/timework?style=flat)](https://www.python.org)
+[![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-red?style=flat)](https://github.com/bugstop/timework-timeout-decorator)
 
-Cross-platform python module to set run time limits <sup>`timer`, `timeout`, `iterative`</sup> as decorators.
+Cross-platform python module to set run time limits <sup>(`timer`, `timeout`, `iterative`)</sup> as decorators.
 
 ## Install
 
@@ -59,7 +59,7 @@ except tw.TimeError as e:
 
 print(a, b, c)
 ```
-```
+```bash
 WARNING:root:timer_demo_a: 0.496672 seconds used
 START:  Tue Feb 18 15:06:45 2020
 FINISH: Tue Feb 18 15:06:46 2020
@@ -93,7 +93,7 @@ except tw.TimeError as e:
 else:
     print('result:', s)
 ```
-```
+```bash
 result: 16
 limit_demo: 3 seconds exceeded
 ```
@@ -140,7 +140,7 @@ except tw.TimeError as e:
 else:
     print('result:', s)
 ```
-```
+```bash
 result: (10, 1024)
 iterative_demo_a/iterative_deepening: 3 seconds exceeded
 (20, 1048576) deque([(20, 1048576)], maxlen=1)
