@@ -57,7 +57,7 @@ def iterative_demo_c(depth, max_depth):
     i = 0
     while i < 2 ** depth:
         i += 1
-    return depth, i
+    return max_depth, i
 
 
 def test_timer_a():

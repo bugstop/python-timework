@@ -109,6 +109,7 @@ def limit(timeout):
 def iterative(timeout, key='max_depth', history=1):
     """
     Decorator. Used to do iterative deepening.
+
     Notice: please use keyword arguments (at least 'max_depth')
             when calling the inner function.
 
