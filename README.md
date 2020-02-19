@@ -7,7 +7,7 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/timework)](https://www.python.org)
 [![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-red)](https://github.com/bugstop/timework-pylib)
 
-Cross-platform python module to set run time limits (timer, timeout and iterative deepening) as decorations.
+Cross-platform python module to set run time limits <sup>`timer`, `timeout`, `iterative`</sup> as decorators.
 
 ## Install
 

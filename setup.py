@@ -5,11 +5,11 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="timework",
-    version="0.2.2",
+    version="0.2.3",
     author="bugstop",
     author_email="pypi@isaacx.com",
     description="Cross-platform python module to set run time limits "
-                "(timer, timeout and iterative deepening) as decorations.",
+                "(timer, timeout and iterative deepening) as decorators.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/bugstop/timework-pylib",
