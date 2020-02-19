@@ -143,7 +143,7 @@ def iterative(timeout, key='max_depth', history=1):
             try:
                 rc = iterative_deepening()
             except TimeError as e:
-                e.message = func.__name__ + '/' + e.message
+                e.message = func.__name__ + '.' + e.message
                 e.result = handler[-1]
                 e.detail = handler
                 raise e

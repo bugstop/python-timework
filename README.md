@@ -11,7 +11,7 @@ Cross-platform python module to set run time limits <sup>(`timer`, `timeout`, `i
 
 ## Install
 
-```
+```bash
 pip install timework
 ```
 
@@ -22,6 +22,16 @@ import timework as tw
 ```
 
 ### timework.timer
+
+**`timework.TimeError`** contains two parts:
+
+- `TimeError.message` ***string***
+  \<*inner function name*\>: \<*time used*\> seconds used
+- `TimeError.result`
+  result of the inner function
+
+**Notice:** In **`timework.timer`** decorator, `timeout` is used to raise a `Error` **after** the inner function finishes. 
+If you want to **stop** the function from running with a time limit, please use **`timework.limit`**.
 
 ```python
 import logging
@@ -70,6 +80,11 @@ error: timer_demo_c: 1.9817 seconds used
 
 ### timework.limit
 
+**`timework.TimeError`** only contains:
+
+- `TimeError.message` *string*
+  \<*inner function name*\>: \<*timeout*\> seconds exceeded
+
 ```python
 @tw.limit(3)
 def limit_demo(m):
@@ -99,6 +114,17 @@ limit_demo: 3 seconds exceeded
 ```
 
 ### timework.iterative
+
+**`timework.TimeError`** contains three parts:
+
+- `TimeError.message` *string*
+  \<*inner function name*\>.iterative_deepening: \<*timeout*\> seconds exceeded
+- `TimeError.result`
+  result of the last level of the iterative deepening search
+- `TimeError.detail` *collections.deque*
+  results of the upper levels *(number of historical records is set at `history`)*
+
+**Notice:** Please make sure the **max-depth**-variable name is given at `key` <sup>(`key='max_depth'` by default)</sup> and its value should be an **integer**.
 
 ```python
 @tw.iterative(3)
@@ -142,9 +168,9 @@ else:
 ```
 ```bash
 result: (10, 1024)
-iterative_demo_a/iterative_deepening: 3 seconds exceeded
+iterative_demo_a.iterative_deepening: 3 seconds exceeded
 (20, 1048576) deque([(20, 1048576)], maxlen=1)
-iterative_demo_b/iterative_deepening: 3 seconds exceeded
+iterative_demo_b.iterative_deepening: 3 seconds exceeded
 20 deque([16, 17, 18, 19, 20], maxlen=5)
 ```
 
