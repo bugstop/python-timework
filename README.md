@@ -5,7 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/bugstop/timework-pylib/badge.svg?branch=master)](https://coveralls.io/github/bugstop/timework-pylib?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c659ee01edaf404cbb346dbac8cefe38)](https://www.codacy.com/manual/bugstop/timework-pylib?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bugstop/timework-pylib&amp;utm_campaign=Badge_Grade)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/timework)](https://www.python.org)
-[![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-yellowgreen)](https://github.com/bugstop/timework-pylib)
+[![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-red)](https://github.com/bugstop/timework-pylib)
 
 Cross-platform python module to set run time limits (timer, timeout and iterative deepening) as decorations.
 

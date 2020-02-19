@@ -53,7 +53,7 @@ def iterative_demo_b(depth):
 
 
 @tw.iterative(3)
-def iterative_demo_c(depth):
+def iterative_demo_c(depth, max_depth):
     i = 0
     while i < 2 ** depth:
         i += 1
@@ -157,6 +157,6 @@ def test_errors():
         assert isinstance(e, TypeError)
 
     try:
-        iterative_demo_c(max_depth='2')
+        iterative_demo_c(depth='2', max_depth=2)
     except Exception as e:
         assert isinstance(e, TypeError)
