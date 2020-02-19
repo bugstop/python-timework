@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="timework",
-    version="0.2.4",
+    version="0.2.5",
     author="bugstop",
     author_email="pypi@isaacx.com",
     description="Cross-platform python module to set run time limits "
