@@ -1,5 +1,6 @@
 from . import timework as tw
 
+import re
 from random import randint
 
 
@@ -51,6 +52,14 @@ def iterative_demo_b(depth):
     return depth, i
 
 
+@tw.iterative(3)
+def iterative_demo_c(depth):
+    i = 0
+    while i < 2 ** depth:
+        i += 1
+    return depth, i
+
+
 def test_timer_a():
     for _ in range(10):
         d = randint(10, 25)
@@ -64,7 +73,8 @@ def test_timer_b():
         try:
             c = timer_demo_b(d)
         except tw.TimeError as e:
-            assert e.message[:12] == 'timer_demo_b'
+            assert e.message.startswith('timer_demo_b')
+            assert re.match(r'^.*:\s(\d|\.)+ seconds used$', e.message) is not None
             assert e.result == 2 ** d
         else:
             assert c == 2 ** d
@@ -89,6 +99,7 @@ def test_limit():
             s = limit_demo(d)
         except tw.TimeError as e:
             assert isinstance(e, tw.TimeError)
+            assert re.match(r'^.*:\s(\d|\.)+ seconds exceeded$', e.message) is not None
         else:
             assert s == 2 ** d
 
@@ -142,5 +153,10 @@ def test_errors():
 
     try:
         iterative_demo_a(max_depth='2')
+    except Exception as e:
+        assert isinstance(e, TypeError)
+
+    try:
+        iterative_demo_c(max_depth='2')
     except Exception as e:
         assert isinstance(e, TypeError)

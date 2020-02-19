@@ -1,12 +1,13 @@
 # timework
 
 [![PyPI](https://img.shields.io/pypi/v/timework)](https://pypi.org/project/timework/)
-[![python](https://img.shields.io/badge/python-3-blue)](https://www.python.org)
 [![Build Status](https://travis-ci.org/bugstop/timework-pylib.svg?branch=master)](https://travis-ci.org/bugstop/timework-pylib)
 [![Coverage Status](https://coveralls.io/repos/github/bugstop/timework-pylib/badge.svg?branch=master)](https://coveralls.io/github/bugstop/timework-pylib?branch=master)
-[![codebeat badge](https://codebeat.co/badges/3d301de4-a88c-4a8a-9712-373fab3126e4)](https://codebeat.co/projects/github-com-bugstop-timework-pylib-master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c659ee01edaf404cbb346dbac8cefe38)](https://www.codacy.com/manual/bugstop/timework-pylib?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bugstop/timework-pylib&amp;utm_campaign=Badge_Grade)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/timework)](https://www.python.org)
+[![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-yellowgreen)](https://github.com/bugstop/timework-pylib)
 
-A package used to set time limits.
+Cross-platform python module to set run time limits (timer, timeout and iterative deepening) as decorations.
 
 ## Install
 
