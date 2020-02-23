@@ -1,6 +1,8 @@
 language: python            # this works for Linux but is an error on macOS or Windows
 jobs:
   include:
+    - name: "Python 3.4 on Xenial Linux"
+      python: "3.4"         # timework: Python 3.4 test will be removed in a future version.
     - name: "Python 3.5 on Xenial Linux"
       python: "3.5"         # this works for Linux but is ignored on macOS or Windows
     - name: "Python 3.6 on Xenial Linux"
@@ -22,7 +24,7 @@ jobs:
         - choco install python --version 3.8.0
         - python -m pip install --upgrade pip
       env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
-install: 
+install:
   - pip3 install --upgrade pip  # all three OSes agree about 'pip3'
   - pip3 install pytest
   - pip3 install pytest-cov
@@ -35,9 +37,9 @@ script:
   - pytest --cov=timework/
 after_success:
   - coveralls
-notifications:  
-  email:  
-    recipients:  
-    - github.build.timework@isaacx.com  
-    on_success: always  
+notifications:
+  email:
+    recipients:
+    - github.build.timework@isaacx.com
+    on_success: always
     on_failure: always

@@ -6,7 +6,6 @@ from collections import deque
 
 class Error(Exception):
     """Base class for exceptions in this module."""
-    pass
 
 
 class TimeError(Error):
@@ -26,13 +25,14 @@ class TimeError(Error):
 
 
 def timer(output=None, *, detail: bool = False, timeout: float = 0):
-    """A Decorator. Measuring the running time.
+    """A decorator. Measuring the execution time.
 
-    The wrapper function measures the running time of the function that is being decorated.
-    The output argument is used to log messages, basically the wrapper function will pass
-    the start time, end time, and run time message to it as strings. Whether to pass start
-    time and end time messages is controlled by detail argument. And timeout argument is
-    used to control error messages. The last two arguments must been passed using keywords.
+    The wrapper function measures the execution time of the function that is being
+    decorated. The output argument is used to log messages, basically the wrapper
+    function will pass the start time, end time, and execution time message to it as
+    strings. Whether to pass start time message and end time message is controlled
+    by detail argument. And timeout argument is used to control error messages. The
+    last two arguments must been passed using keywords.
 
     Typical usage examples:
 
@@ -84,12 +84,10 @@ def timer(output=None, *, detail: bool = False, timeout: float = 0):
             if timeout != 0 and used > timeout:
                 e = TimeError(s, rc, used)
                 raise e
-            elif output is not None:
-                if detail:
-                    t = time.asctime(time.localtime(time.time()))
-                    output('FINISH: {}\n{}'.format(t, s))
-                else:
-                    output(s)
+
+            if output is not None:
+                t = time.asctime(time.localtime(time.time()))
+                output(s if not detail else 'FINISH: {}\n{}'.format(t, s))
 
             return rc
 
@@ -99,9 +97,9 @@ def timer(output=None, *, detail: bool = False, timeout: float = 0):
 
 
 def limit(timeout: float):
-    """A Decorator. Limiting the running time.
+    """A decorator. Limiting the execution time.
 
-    The wrapper function limits the running time of the function being
+    The wrapper function limits the execution time of the function being
     decorated. The timeout argument is used to set timeout (in seconds).
     After that time of processing, raise a TimeError to terminate.
 
@@ -151,8 +149,8 @@ def limit(timeout: float):
 
             if isinstance(rc, Exception):
                 raise rc
-            else:
-                return rc
+
+            return rc
 
         return wrapper
 
@@ -160,22 +158,22 @@ def limit(timeout: float):
 
 
 def iterative(timeout: float, key: str = 'max_depth', history: int = 1):
-    """A Decorator. Used to process iterative deepening.
+    """A decorator. Used to process iterative deepening.
 
     The wrapper function is actually doing iterative deepening which is commonly used
     in search algorithms. The wrapper function runs the inner function progressively,
     and stores the return values of each step. Still, the timeout argument is used to
     set timeout (in seconds). The key argument should (and must) set to the name of
-    the variable that controls the maximum depth of each search. Since search histories
-    are stored in a collections.deque object, the history argument will be directly
-    passed to the maxlen argument of the deque.
+    the variable in the function been decorated that controls the maximum depth of the
+    search. Since results of every finished levels are stored in a collections.deque
+    object, value of the history argument will be directly passed to the deque (maxlen).
 
     Notice:
         Please use keyword arguments when calling the function that is being decorated.
 
-        The max_depth argument of the decorated function should set as maximum depth and
-        this wrapper function will try to run the inner function from max_depth=1 until
-        max_depth=[your_value] or reaches [timeout] second (can still provide results).
+        The max_depth argument of the decorated function should be set to maximum search
+        depth. This wrapper function will try to run the inner function from max_depth=1
+        until max_depth=[your_value], or reaches [timeout] second (still provide results).
 
     Typical usage examples:
 
@@ -231,6 +229,7 @@ def iterative(timeout: float, key: str = 'max_depth', history: int = 1):
                 return result
 
             handler = deque(maxlen=history)
+
             try:
                 rc = iterative_deepening()
             except TimeError as e:

@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="timework",
-    version="0.2.7",
+    version="0.2.8",
     author="bugstop",
     author_email="pypi@isaacx.com",
-    description="Cross-platform python module to set run time limits "
+    description="Cross-platform python module to set execution time limits "
                 "(timer, timeout and iterative deepening) as decorators.",
     long_description=long_description,
     long_description_content_type="text/markdown",

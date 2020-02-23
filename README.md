@@ -1,13 +1,13 @@
 # timework
 
-[![PyPI](https://img.shields.io/pypi/v/timework?style=flat)](https://pypi.org/project/timework/)
-[![Build Status](https://travis-ci.org/bugstop/timework-timeout-decorator.svg?branch=master;style=flat)](https://travis-ci.org/bugstop/timework-timeout-decorator)
-[![Coverage Status](https://coveralls.io/repos/github/bugstop/timework-timeout-decorator/badge.svg?branch=master;style=flat)](https://coveralls.io/github/bugstop/timework-timeout-decorator?branch=master)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c659ee01edaf404cbb346dbac8cefe38)](https://www.codacy.com/manual/bugstop/timework-timeout-decorator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bugstop/timework-timeout-decorator&amp;utm_campaign=Badge_Grade)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/timework?style=flat)](https://www.python.org)
-[![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-red?style=flat)](https://github.com/bugstop/timework-timeout-decorator)
+[![PyPI](https://img.shields.io/pypi/v/timework)](https://pypi.org/project/timework/)
+[![Build Status](https://travis-ci.org/bugstop/timework-timeout-decorator.svg?branch=master)](https://travis-ci.org/bugstop/timework-timeout-decorator)
+[![Coverage Status](https://coveralls.io/repos/github/bugstop/timework-timeout-decorator/badge.svg?branch=master)](https://coveralls.io/github/bugstop/timework-timeout-decorator?branch=master)
+[![CodeFactor](https://www.codefactor.io/repository/github/bugstop/timework-timeout-decorator/badge)](https://www.codefactor.io/repository/github/bugstop/timework-timeout-decorator)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/timework)](https://www.python.org)
+[![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-red)](https://github.com/bugstop/timework-timeout-decorator)
 
-Cross-platform python module to set run time limits <sup>(`timer`, `timeout`, `iterative`)</sup> as decorators.
+Cross-platform python module to set execution time limits <sup>`timer`, `timeout`, `iterative`</sup> as decorators.
 
 ## Install
 
@@ -23,15 +23,15 @@ import timework as tw
 
 ### timework.timer
 
-**`timework.TimeError`** contains two parts:
+***A decorator measuring the execution time.***
 
-- `TimeError.message` ***string,***
-  \<*inner function name*\>: \<*time used*\> seconds used
-- `TimeError.result`
-  result of the inner function
+**`timework.TimeError`** contains three parts:
 
-***Notice:*** In **`timework.timer`** decorator, `timeout` is used to raise a `Error` **after** the inner function finishes. 
-If you want to **stop** the function from running with a time limit, please use **`timework.limit`**.
+- `TimeError.message` ***string,*** \<*decorated function name*\>: \<*time used*\> seconds used
+- `TimeError.result` return values of the function being decorated
+- `TimeError.detail` ***float,*** time used
+
+***Notice:*** In **`@timer`** decorator, `timeout` is used to raise a `Error` **after** the decorated function finishes, but fails to finish within `timeout` seconds. If you want to **terminate** the function with a `timeout` limit, please use **`@limit`**.
 
 ```python
 import logging
@@ -80,10 +80,13 @@ error: timer_demo_c: 1.9817 seconds used
 
 ### timework.limit
 
+***A decorator limiting the execution time.***
+
 **`timework.TimeError`** only contains:
 
-- `TimeError.message` ***string,***
-  \<*inner function name*\>: \<*timeout*\> seconds exceeded
+- `TimeError.message` ***string,*** <*decorated function name*\>: \<*timeout*\> seconds exceeded
+- `TimeError.result` ***None,*** *unused*
+- `TimeError.detail` ***None,*** *unused*
 
 ```python
 @tw.limit(3)
@@ -115,16 +118,15 @@ limit_demo: 3 seconds exceeded
 
 ### timework.iterative
 
+***A decorator used to process iterative deepening.***
+
 **`timework.TimeError`** contains three parts:
 
-- `TimeError.message` ***string,***
-  \<*inner function name*\>.iterative_deepening: \<*timeout*\> seconds exceeded
-- `TimeError.result`
-  result of the last level of the iterative deepening search
-- `TimeError.detail` ***collections.deque,***
-  results of the upper levels *(number of historical records is set at `history`)*
+- `TimeError.message` ***string,*** \<*decorated function name*\>.iterative_deepening: \<*timeout*\> seconds exceeded
+- `TimeError.result` return values at current level of the iterative deepening search
+- `TimeError.detail` ***collections.deque,*** results of the previous levels
 
-***Notice:*** Please make sure the **max-depth**-variable is an **integer** and its name is given at `key`.<sup>(`key='max_depth'` by default)</sup>
+***Notice:*** Please use keyword arguments when calling the function that is being decorated. Make sure the **max-depth** variable of the inner function is given at `key`<sup>(`key='max_depth'` by default)</sup> and whose value should be the maximum search-depth<sup>*(integer)*</sup>.
 
 ```python
 @tw.iterative(3)
@@ -174,6 +176,8 @@ iterative_demo_b.iterative_deepening: 3 seconds exceeded
 20 deque([16, 17, 18, 19, 20], maxlen=5)
 ```
 
+*You can read docstrings for more details.*
+
 ## License
 
-MIT © <a href="https://github.com/bugstop" style="color: black !important;text-decoration: none !important;">bugstop</a>
+MIT License &copy; <a href="https://github.com/bugstop" style="color: black !important;text-decoration: none !important;">bugstop</a>
