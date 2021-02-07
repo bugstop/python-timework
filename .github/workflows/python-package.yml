@@ -31,6 +31,8 @@ jobs:
     - name: Test with pytest
       run: |
         pytest --cov=timework/
-    - name: coveralls
+    - name: Publish to coveralls.io
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         coveralls
