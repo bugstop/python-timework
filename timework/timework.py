@@ -1,22 +1,37 @@
 import time
 import functools
+from math import modf
+from typing import Callable
 from threading import Thread
-from collections import deque
 
 
-class Error(Exception):
-    """Base class for exceptions in this module."""
+def nil(*_, **__):
+    """Black hole."""
 
 
-class TimeError(Error):
-    """Class for timeouts."""
+def sec_to_hms(sec: float) -> str:
+    ms, s = modf(sec)
+    m, s = divmod(s, 60)
+    h, m = divmod(m, 60)
+    hms = "%02d:%02d:%02d.%03.0f" % (h, m, s, ms * 1000)
+    return hms
 
-    def __init__(self, message, result=None, detail=None):
+
+def hms_to_sec(hms: str) -> float:
+    h, m, s, ms = map(int, hms.replace('.', ':').split(':'))
+    sec = h * 3600 + m * 60 + s + ms * 0.001
+    return sec
+
+
+class TimeError(Exception):
+    """Exceptions for timeouts."""
+
+    def __init__(self, message: str, result=None, detail=None):
         """Timeout information.
 
         Args:
             message: timeout error message
-            result: return values of the function that is being decorated
+            result: return values of the decorated function (if have)
             detail: more information (if have)
         """
         self.message = message
@@ -24,7 +39,7 @@ class TimeError(Error):
         self.detail = detail
 
 
-def timer(output=None, *, detail: bool = False, timeout: float = 0):
+def timer(output: Callable = nil, *, detail: bool = False, timeout: float = 0):
     """A decorator. Measuring the execution time.
 
     The wrapper function measures the execution time of the function that is being
@@ -70,24 +85,25 @@ def timer(output=None, *, detail: bool = False, timeout: float = 0):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            if output is not None and detail:
+            if detail:
                 t = time.asctime(time.localtime(time.time()))
-                output('START:  {}'.format(t))
+                output('[TIMEWORK] Start:  {}'.format(t))
 
-            start = time.time()
+            initial = time.time()
             rc = func(*args, **kwargs)
-            end = time.time()
+            final = time.time()
+            used = final - initial
 
-            used = end - start
-            s = '{}: {:g} seconds used'.format(func.__name__, used)
+            if detail:
+                t = time.asctime(time.localtime(time.time()))
+                output('[TIMEWORK] Finish: {}'.format(t))
+
+            s = '[TIMEWORK] {} used: {}' \
+                .format(func.__name__, sec_to_hms(used))
+            output(s)
 
             if timeout != 0 and used > timeout:
-                e = TimeError(s, rc, used)
-                raise e
-
-            if output is not None:
-                t = time.asctime(time.localtime(time.time()))
-                output(s if not detail else 'FINISH: {}\n{}'.format(t, s))
+                raise TimeError(s, rc, used)
 
             return rc
 
@@ -132,15 +148,15 @@ def limit(timeout: float):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            rc = TimeError('{}: {:g} seconds exceeded'
-                           .format(func.__name__, timeout))
+            rc = TimeError('[TIMEWORK] {} used: {}'
+                           .format(func.__name__, sec_to_hms(timeout)))
 
             def new_func():
                 nonlocal rc
                 try:
                     rc = func(*args, **kwargs)
-                except Exception as err_:
-                    rc = err_
+                except Exception as err:
+                    rc = err
 
             t = Thread(target=new_func)
             t.daemon = True
@@ -149,9 +165,75 @@ def limit(timeout: float):
 
             if isinstance(rc, Exception):
                 raise rc
-
-            return rc
+            else:
+                return rc
 
         return wrapper
 
     return decorator
+
+
+class Stopwatch(object):
+    def __init__(self, output=print):
+        self.output = output
+        self._initial = time.time()
+        self._start_at = self._initial
+        self._pause_at = self._initial
+        self._running = False
+
+    def __enter__(self):
+        t = time.asctime(time.localtime(time.time()))
+        self.output('[TIMEWORK] Start:  {}'.format(t))
+
+        self.restart()
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        if self._running:
+            self.stop()
+
+        t = time.asctime(time.localtime(time.time()))
+        self.output('[TIMEWORK] Finish: {}'.format(t))
+
+        return self
+
+    def __calc(self):
+        now = time.time()
+        total = sec_to_hms(now - self._initial)
+        used = sec_to_hms(now - self._start_at)
+        return total, used
+
+    def restart(self):
+        self._running = True
+        self._initial = time.time()
+        self._start_at = self._initial
+
+    def pause(self):
+        if self._running:
+            self._running = False
+            self._pause_at = time.time()
+
+    def resume(self):
+        if not self._running:
+            self._running = True
+            offset = time.time() - self._pause_at
+
+            self._initial += offset
+            self._start_at += offset
+
+    def split(self):
+        total, current = self.__calc()
+        self.output('[TIMEWORK] Split:  {} | {}'
+                    .format(total, current))
+
+        self._start_at = time.time()
+
+    def stop(self):
+        self._running = False
+        total, current = self.__calc()
+
+        if self._start_at == self._initial:  # no splits
+            self.output('[TIMEWORK] Stop:   {}'.format(total))
+        else:
+            self.output('[TIMEWORK] Stop:   {} | {}'
+                        .format(total, current))
