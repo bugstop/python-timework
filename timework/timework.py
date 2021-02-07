@@ -39,24 +39,19 @@ class TimeError(Exception):
         self.detail = detail
 
 
-def timer(output: Callable = nil, *, detail: bool = False, timeout: float = 0):
+def timer(output: Callable = nil, *, detail: bool = False):
     """A decorator. Measuring the execution time.
 
     The wrapper function measures the execution time of the function that is being
     decorated. The output argument is used to log messages, basically the wrapper
     function will pass the start time, end time, and execution time message to it as
-    strings. Whether to pass start time message and end time message is controlled
-    by detail argument. And timeout argument is used to control error messages. The
-    last two arguments must been passed using keywords.
+    strings. Whether to pass start time and end time message is controlled by detail
+    argument. This argument must be passed using keywords.
 
     Typical usage examples:
 
         @timer(logging.warning)
-        def your_function_a():
-            ...
-
-        @timer(timeout=5)
-        def your_function_b():
+        def your_function():
             ...
 
 
@@ -64,9 +59,6 @@ def timer(output: Callable = nil, *, detail: bool = False, timeout: float = 0):
         output: A function object that specifies where to log messages.
                 For example: print.
         detail: A boolean value, whether to print start and end time.
-        timeout: Another optional variable controlling errors,
-                 if run_time_after_finished > timeout, then raise TimeError.
-                 (0: never, -1: always)
 
     Returns:
         Exactly the return values of the inner function that is being decorated.
@@ -101,9 +93,6 @@ def timer(output: Callable = nil, *, detail: bool = False, timeout: float = 0):
             s = '[TIMEWORK] {} used: {}' \
                 .format(func.__name__, sec_to_hms(used))
             output(s)
-
-            if timeout != 0 and used > timeout:
-                raise TimeError(s, rc, used)
 
             return rc
 
@@ -197,11 +186,15 @@ class Stopwatch(object):
 
         return self
 
-    def __calc(self):
+    def get_sec(self):
         now = time.time()
-        total = sec_to_hms(now - self._initial)
-        used = sec_to_hms(now - self._start_at)
-        return total, used
+        split = now - self._start_at
+        total = now - self._initial
+        return split, total
+
+    def get_hms(self):
+        split, total = map(sec_to_hms, self.get_sec())
+        return split, total
 
     def restart(self):
         self._running = True
@@ -222,7 +215,7 @@ class Stopwatch(object):
             self._start_at += offset
 
     def split(self):
-        total, current = self.__calc()
+        current, total = self.get_hms()
         self.output('[TIMEWORK] Split:  {} | {}'
                     .format(total, current))
 
@@ -230,7 +223,7 @@ class Stopwatch(object):
 
     def stop(self):
         self._running = False
-        total, current = self.__calc()
+        current, total = self.get_hms()
 
         if self._start_at == self._initial:  # no splits
             self.output('[TIMEWORK] Stop:   {}'.format(total))

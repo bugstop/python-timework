@@ -21,6 +21,10 @@ def test_no_split():
         s.resume()
         assert s._running is True
         time.sleep(.5)
+        split, total = s.get_hms()
+        assert split == total
+        sec, _ = s.get_sec()
+        assert sec == tw.hms_to_sec(split)
         time.sleep(.6)
         assert s._running is True
         s.stop()
