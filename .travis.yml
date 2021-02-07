@@ -1,8 +1,6 @@
 language: python            # this works for Linux but is an error on macOS or Windows
 jobs:
   include:
-    - name: "Python 3.4 on Xenial Linux"
-      python: "3.4"         # timework: Python 3.4 test will be removed in a future version.
     - name: "Python 3.5 on Xenial Linux"
       python: "3.5"         # this works for Linux but is ignored on macOS or Windows
     - name: "Python 3.6 on Xenial Linux"
@@ -11,8 +9,10 @@ jobs:
       python: "3.7"
     - name: "Python 3.8 on Xenial Linux"
       python: "3.8"
-    - name: "Python 3.8-dev on Xenial Linux"
-      python: "3.8-dev"     # 3.8 development branch
+    - name: "Python 3.9 on Xenial Linux"
+      python: "3.9"
+    - name: "Python 3.9-dev on Xenial Linux"
+      python: "3.9-dev"     # 3.9 development branch
     - name: "Python 3.7.4 on macOS"
       os: osx
       osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
