@@ -7,7 +7,14 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/timework)](https://www.python.org)
 [![platform](https://img.shields.io/badge/platform-windows%20%7C%20macos%20%7C%20linux-red)](https://github.com/bugstop/timework-timeout-decorator)
 
-Cross-platform python module to set execution time limits <sup>`timer`, `timeout`, `iterative`</sup> as decorators.
+measure / limit the function execution time, cross-platform
+
+<!--
+python -m pip install --upgrade build
+python -m build
+python -m pip install --user --upgrade twine
+python -m twine upload dist/*
+-->
 
 ## Install
 
@@ -69,7 +76,7 @@ except tw.TimeError as e:
 
 print(a, b, c)
 ```
-```bash
+```
 WARNING:root:timer_demo_a: 0.496672 seconds used
 START:  Tue Feb 18 15:06:45 2020
 FINISH: Tue Feb 18 15:06:46 2020
@@ -111,69 +118,9 @@ except tw.TimeError as e:
 else:
     print('result:', s)
 ```
-```bash
+```
 result: 16
 limit_demo: 3 seconds exceeded
-```
-
-### timework.iterative
-
-***A decorator used to process iterative deepening.***
-
-**`timework.TimeError`** contains three parts:
-
-- `TimeError.message` ***string,*** \<*decorated function name*\>.iterative_deepening: \<*timeout*\> seconds exceeded
-- `TimeError.result` return values at current level of the iterative deepening search
-- `TimeError.detail` ***collections.deque,*** results of the previous levels
-
-***Notice:*** Please use keyword arguments when calling the function that is being decorated. Make sure the **max-depth** variable of the inner function is given at `key`<sup>(`key='max_depth'` by default)</sup> and whose value should be the maximum search-depth<sup>*(integer)*</sup>.
-
-```python
-@tw.iterative(3)
-def iterative_demo_a(max_depth):
-    i = 0
-    while i < 2 ** max_depth:
-        i += 1
-    return max_depth, i
-
-@tw.iterative(3, history=5, key='depth')
-def iterative_demo_b(depth):
-    i = 0
-    while i < 2 ** depth:
-        i += 1
-    return depth
-```
-```python
-try:
-    s = iterative_demo_a(max_depth=10)
-except tw.TimeError as e:
-    print(e.message)
-    print(e.result, e.detail)
-else:
-    print('result:', s)
-
-try:
-    s = iterative_demo_a(max_depth=25)
-except tw.TimeError as e:
-    print(e.message)
-    print(e.result, e.detail)
-else:
-    print('result:', s)
-
-try:
-    s = iterative_demo_b(depth=25)
-except tw.TimeError as e:
-    print(e.message)
-    print(e.result, e.detail)
-else:
-    print('result:', s)
-```
-```bash
-result: (10, 1024)
-iterative_demo_a.iterative_deepening: 3 seconds exceeded
-(20, 1048576) deque([(20, 1048576)], maxlen=1)
-iterative_demo_b.iterative_deepening: 3 seconds exceeded
-20 deque([16, 17, 18, 19, 20], maxlen=5)
 ```
 
 *You can read docstrings for more details.*

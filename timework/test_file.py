@@ -36,30 +36,6 @@ def limit_demo(m):
     return i
 
 
-@tw.iterative(3)
-def iterative_demo_a(max_depth):
-    i = 0
-    while i < 2 ** max_depth:
-        i += 1
-    return i
-
-
-@tw.iterative(3, history=5, key='depth')
-def iterative_demo_b(depth):
-    i = 0
-    while i < 2 ** depth:
-        i += 1
-    return depth, i
-
-
-@tw.iterative(3)
-def iterative_demo_c(depth, max_depth):
-    i = 0
-    while i < 2 ** depth:
-        i += 1
-    return max_depth, i
-
-
 def test_timer_a():
     for _ in range(10):
         d = randint(10, 25)
@@ -104,32 +80,6 @@ def test_limit():
             assert s == 2 ** d
 
 
-def test_iterative_a():
-    for _ in range(5):
-        d = randint(10, 20)
-        try:
-            s = iterative_demo_a(max_depth=d)
-        except tw.TimeError as e:
-            assert e.result <= 2 ** d
-            assert len(e.detail) == 1
-            assert e.result == e.detail[-1]
-        else:
-            assert s == 2 ** d
-
-
-def test_iterative_b():
-    for _ in range(5):
-        d = randint(10, 30)
-        try:
-            s = iterative_demo_b(depth=d)
-        except tw.TimeError as e:
-            assert e.result <= (d, 2 ** d)
-            assert len(e.detail) == 5
-            assert e.result == e.detail[-1]
-        else:
-            assert s == (d, 2 ** d)
-
-
 def test_errors():
     try:
         timer_demo_b('2')
@@ -138,25 +88,5 @@ def test_errors():
 
     try:
         limit_demo('2')
-    except Exception as e:
-        assert isinstance(e, TypeError)
-
-    try:
-        iterative_demo_a('2')
-    except Exception as e:
-        assert isinstance(e, KeyError)
-
-    try:
-        iterative_demo_a(depth=2)
-    except Exception as e:
-        assert isinstance(e, KeyError)
-
-    try:
-        iterative_demo_a(max_depth='2')
-    except Exception as e:
-        assert isinstance(e, TypeError)
-
-    try:
-        iterative_demo_c(depth='2', max_depth=2)
     except Exception as e:
         assert isinstance(e, TypeError)
