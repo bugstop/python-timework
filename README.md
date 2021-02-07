@@ -1,10 +1,8 @@
 # timework
 
 [![PyPI](https://img.shields.io/pypi/v/timework)](https://pypi.org/project/timework/)
-[![Build Status](https://travis-ci.com/bugstop/python-timework.svg?branch=master)](https://travis-ci.com/bugstop/python-timework)
-[![Coverage Status](https://coveralls.io/repos/github/bugstop/python-timework/badge.svg?branch=master)](https://coveralls.io/github/bugstop/python-timework?branch=master)
 [![CodeFactor](https://www.codefactor.io/repository/github/bugstop/python-timework/badge)](https://www.codefactor.io/repository/github/bugstop/python-timework)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/timework)](https://www.python.org)
+[![Coverage Status](https://coveralls.io/repos/github/bugstop/python-timework/badge.svg?branch=master)](https://coveralls.io/github/bugstop/python-timework?branch=master)
 [![platform](https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-red)](https://github.com/bugstop/python-timework)
 
 measure / limit the function execution time, cross-platform
