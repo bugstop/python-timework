@@ -12,7 +12,7 @@ def timer_demo(s):
       [TIMEWORK] Finish: Mon Feb  8 03:35:08 2021
       [TIMEWORK] timer_demo_a used: 00:00:02.406
     """
-    time.sleep(s)
+    time.sleep(s / 10)
     return s * 2
 
 
@@ -33,8 +33,8 @@ def limit_demo(m):
 def test_timer():
     for _ in range(10):
         d = randint(10, 25)
-        x = timer_demo(d / 10)
-        assert x == .2 * d
+        x = timer_demo(d)
+        assert x == 2 * d
 
 
 def test_limit():
