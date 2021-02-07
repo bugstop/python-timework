@@ -26,17 +26,19 @@ pip install timework
 import timework as tw
 ```
 
-### timework.timer
+### Statement `with`
 
-***A decorator measuring the execution time.***
+#### timework.Stopwatch
 
-**`timework.TimeError`** contains three parts:
+**Todo**
 
-- `TimeError.message` ***string,*** \<*decorated function name*\>: \<*time used*\> seconds used
-- `TimeError.result` return values of the function being decorated
-- `TimeError.detail` ***float,*** time used
+### Decorator `@`
 
-***Notice:*** In **`@timer`** decorator, `timeout` is used to raise a `Error` **after** the decorated function finishes, but fails to finish within `timeout` seconds. If you want to **terminate** the function with a `timeout` limit, please use **`@limit`**.
+**Todo:** read docstrings and tests for more details
+
+#### timework.timer
+
+> measuring the execution time.
 
 ```python
 import logging
@@ -54,38 +56,24 @@ def timer_demo_b():
     while i < 2 ** 24:
         i += 1
     return i
-
-@tw.timer(timeout=1)
-def timer_demo_c():
-    i = 0
-    while i < 2 ** 25:
-        i += 1
-    return i
 ```
 ```python
 a = timer_demo_a()
 b = timer_demo_b()
 
-try:
-    c = timer_demo_c()
-except tw.TimeError as e:
-    print('error:', e.message)
-    c = e.result
-
-print(a, b, c)
+print(a, b)
 ```
 ```
 WARNING:root:timer_demo_a: 0.496672 seconds used
 START:  Tue Feb 18 15:06:45 2020
 FINISH: Tue Feb 18 15:06:46 2020
 timer_demo_b: 0.989352 seconds used
-error: timer_demo_c: 1.9817 seconds used
-8388608 16777216 33554432
+8388608 16777216
 ```
 
-### timework.limit
+#### timework.limit
 
-***A decorator limiting the execution time.***
+> limiting the execution time.
 
 **`timework.TimeError`** only contains:
 
@@ -121,8 +109,6 @@ result: 16
 limit_demo: 3 seconds exceeded
 ```
 
-*You can read docstrings for more details.*
-
 ## License
 
-MIT License &copy; <a href="https://github.com/bugstop" style="color: black !important;text-decoration: none !important;">bugstop</a>
+MIT License &copy; <a href="https://github.com/bugstop" style="color: black !important; text-decoration: none !important;">bugstop</a>

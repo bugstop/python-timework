@@ -31,7 +31,7 @@ class TimeError(Exception):
 
         Args:
             message: timeout error message
-            result: return values of the decorated function (if have)
+            result: return values of the function being decorated
             detail: more information (if have)
         """
         self.message = message
@@ -57,21 +57,11 @@ def timer(output: Callable = nil, *, detail: bool = False):
 
     Args:
         output: A function object that specifies where to log messages.
-                For example: print.
+                For example: print. timework.nil does not log messages.
         detail: A boolean value, whether to print start and end time.
 
     Returns:
-        Exactly the return values of the inner function that is being decorated.
-        In this case, the process finishes within [timeout] seconds.
-
-    Raises:
-        TimeError: This error does not occur until the inner function
-                   terminates, but fails to finish within [timeout] seconds.
-
-                   A TimeError object contains:
-                       TimeError.message: timeout message
-                       TimeError.result: return values
-                       TimeError.detail: used run time
+        Exactly the return values of the inner function just as normal.
     """
 
     def decorator(func):
@@ -121,7 +111,7 @@ def limit(timeout: float):
                  not yet finishes, then raise TimeError and stop the inner function.
 
     Returns:
-        Exactly the return values of the inner function that is being decorated.
+        Exactly the return values of the inner function just as normal.
         In this case, the process finishes within [timeout] seconds.
 
     Raises:

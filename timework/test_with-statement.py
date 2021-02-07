@@ -1,7 +1,6 @@
 from . import timework as tw
 
 import time
-from random import randint
 
 def test_no_split():
     """
