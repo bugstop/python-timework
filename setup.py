@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="timework",
-    version="0.3.0",
+    version="0.3.1",
     author="bugstop",
     author_email="pypi@isaacx.com",
     description="measure / limit the function execution time, cross-platform",
