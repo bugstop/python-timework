@@ -7,13 +7,6 @@
 
 measure / limit execution time using with-statement or decorators, cross-platform
 
-<!--
-python -m pip install --upgrade build
-python -m build
-python -m pip install --user --upgrade twine
-python -m twine upload dist/*
--->
-
 ## Install
 
 ```bash
@@ -28,86 +21,23 @@ import timework as tw
 
 ### Statement `with`
 
+**Todo: README**
+
 #### timework.Stopwatch
 
-**Todo**
+> measure execution time
 
 ### Decorator `@`
 
-**Todo:** read docstrings and tests for more details
+**Todo: README** read docstrings and tests for more details
 
 #### timework.timer
 
-> measuring the execution time.
-
-```python
-import logging
-
-@tw.timer(logging.warning)
-def timer_demo_a():
-    i = 0
-    while i < 2 ** 23:
-        i += 1
-    return i
-
-@tw.timer(print, detail=True)
-def timer_demo_b():
-    i = 0
-    while i < 2 ** 24:
-        i += 1
-    return i
-```
-```python
-a = timer_demo_a()
-b = timer_demo_b()
-
-print(a, b)
-```
-```
-WARNING:root:timer_demo_a: 0.496672 seconds used
-START:  Tue Feb 18 15:06:45 2020
-FINISH: Tue Feb 18 15:06:46 2020
-timer_demo_b: 0.989352 seconds used
-8388608 16777216
-```
+> measure execution time
 
 #### timework.limit
 
-> limiting the execution time.
-
-**`timework.TimeError`** only contains:
-
-- `TimeError.message` ***string,*** <*decorated function name*\>: \<*timeout*\> seconds exceeded
-- `TimeError.result` ***None,*** *unused*
-- `TimeError.detail` ***None,*** *unused*
-
-```python
-@tw.limit(3)
-def limit_demo(m):
-    i = 0
-    while i < 2 ** m:
-        i += 1
-    return i
-```
-```python
-try:
-    s = limit_demo(4)
-except tw.TimeError as e:
-    print(e)
-else:
-    print('result:', s)
-
-try:
-    s = limit_demo(30)
-except tw.TimeError as e:
-    print(e)
-else:
-    print('result:', s)
-```
-```
-result: 16
-limit_demo: 3 seconds exceeded
-```
+> limit execution time
 
 ## License
 
