@@ -42,10 +42,8 @@ def test_limit():
         d = randint(15, 35)
         try:
             rc = limit_demo(d)
-        except tw.TimeError as e:
-            assert e.message.startswith('[TIMEWORK] limit_demo')
-            assert e.result is None
-            assert e.detail is None
+        except tw.TimeoutException as e:
+            assert str(e).startswith('[TIMEWORK] limit_demo')
         else:
             assert rc == 2 ** d
 
