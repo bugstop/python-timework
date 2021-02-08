@@ -2,6 +2,7 @@ from . import timework as tw
 
 import time
 
+
 def test_no_split():
     """
     output example:
@@ -21,10 +22,9 @@ def test_no_split():
             s.resume()
             assert s._running is True
             time.sleep(.5)
-            split, total = s.get_hms()
+            split, total = s.get_sec()
             assert split == total
-            sec, _ = s.get_sec()
-            assert sec == tw.hms_to_sec(split)
+            assert split == tw.hms_to_sec(tw.sec_to_hms(total))
             time.sleep(.6)
             assert s._running is True
             s.stop()
@@ -56,5 +56,33 @@ def test_split():
             time.sleep(.6)
             s.split()
             assert s._start_at - s._initial > .6
+            time.sleep(.7)
+            assert s._running is True
+
+
+def test_restart():
+    """
+    output example:
+      [TIMEWORK] Start:  Mon Feb  8 17:14:57 2021
+      [TIMEWORK] Split:  00:00:00.312 | 00:00:00.312
+      [TIMEWORK] Stop:   00:00:01.119
+      [TIMEWORK] Stop:   00:00:00.709
+      [TIMEWORK] Finish: Mon Feb  8 17:15:00 2021
+    """
+    for _ in range(3):
+        with tw.Stopwatch() as s:
+            assert s._running is True
+            time.sleep(.3)
+            s.split()
+            time.sleep(.4)
+            s.restart()
+            assert s._running is True
+            time.sleep(.5)
+            split, total = s.get_sec()
+            assert total < .6
+            time.sleep(.6)
+            s.stop()
+            assert s._running is False
+            s.restart()
             time.sleep(.7)
             assert s._running is True
