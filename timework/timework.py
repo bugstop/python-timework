@@ -23,20 +23,8 @@ def hms_to_sec(hms: str) -> float:
     return sec
 
 
-class TimeError(Exception):
+class TimeoutException(Exception):
     """Exceptions for timeouts."""
-
-    def __init__(self, message: str, result=None, detail=None):
-        """Timeout information.
-
-        Args:
-            message: timeout error message
-            result: return values of the function being decorated
-            detail: more information (if have)
-        """
-        self.message = message
-        self.result = result
-        self.detail = detail
 
 
 def timer(output: Callable = nil, *, detail: bool = False):
@@ -115,20 +103,16 @@ def limit(timeout: float):
         In this case, the process finishes within [timeout] seconds.
 
     Raises:
-        TimeError: This error occurs when the inner function runs
-                   for [timeout] seconds and still not finishes.
-
-                   A TimeError object contains:
-                       TimeError.message: timeout message
-                       TimeError.result: None (unused)
-                       TimeError.detail: None (unused)
+        TimeoutException: This error occurs when the inner function runs
+                          for [timeout] seconds and still not finishes.
     """
 
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            rc = TimeError('[TIMEWORK] {} used: {}'
-                           .format(func.__name__, sec_to_hms(timeout)))
+            rc = TimeoutException(
+                '[TIMEWORK] {} used: {}'
+                .format(func.__name__, sec_to_hms(timeout)))
 
             def new_func():
                 nonlocal rc

@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="timework",
-    version="0.3.2",
+    version="0.3.3",
     author="bugstop",
     author_email="pypi@isaacx.com",
-    description="measure / limit the function execution time, cross-platform",
+    description="measure / limit execution time using with-statement or decorators, cross-platform",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/bugstop/python-timework",
