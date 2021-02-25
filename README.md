@@ -5,7 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/bugstop/python-timework/badge.svg?branch=master)](https://coveralls.io/github/bugstop/python-timework?branch=master)
 [![platform](https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-red)](https://github.com/bugstop/python-timework)
 
-measure / limit execution time using with-statement or decorators, cross-platform
+measure / limit execution time using with-statements or decorators, cross-platform
 
 ## Install
 
