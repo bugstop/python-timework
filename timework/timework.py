@@ -4,7 +4,6 @@ from math import modf
 from typing import Callable
 from threading import Thread
 
-
 PREFIX = '[TIMEWORK] '
 
 
@@ -130,7 +129,7 @@ def timer(output: Callable = nil, *, detail: bool = False):
                 t = time.asctime(time.localtime(time.time()))
                 output(PREFIX + "Finish: {}".format(t))
 
-            s = PREFIX + "{} used: {}"\
+            s = PREFIX + "{} used: {}" \
                 .format(func.__name__, sec_to_hms(used))
             output(s)
 
