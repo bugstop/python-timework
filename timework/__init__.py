@@ -1,5 +1,5 @@
 """
-timework 0.4.0
+timework 0.4.1
 
 MIT License © bugstop
 
@@ -18,5 +18,5 @@ timework.Stopwatch()  - a with statement class for stopwatch
 from .timework import *
 
 __name__ = 'timework'
-__version__ = '0.4.0'
+__version__ = '0.4.1'
 __all__ = ['timer', 'limit', 'Stopwatch']

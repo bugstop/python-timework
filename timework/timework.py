@@ -32,7 +32,25 @@ class TimeoutException(Exception):
 
 
 class Stopwatch(object):
-    def __init__(self, output=print):
+    """This class works just like a real stopwatch.
+
+    Example:
+        with Stopwatch() as s:
+            s.split()
+            s.stop()
+            s.restart()
+            s.pause()
+            s.resume()
+            s.get_sec()
+            s.get_hms()
+
+    Functions:
+        get_sec()  get_hms()  restart()  pause()
+        resume()   split()    stop()
+    """
+
+    def __init__(self, output: Callable = print):
+        """Set parameters."""
         self.output = output
         self._initial = time.time()
         self._start_at = self._initial
@@ -40,52 +58,61 @@ class Stopwatch(object):
         self._running = False
 
     def __enter__(self):
+        """Start the stopwatch."""
         t = time.asctime(time.localtime(time.time()))
         self.output(PREFIX + "Start:  {}".format(t))
         self.restart()
         return self
 
-    def __exit__(self, exc_type, exc_value, exc_tb):
+    def __exit__(self):
+        """Stop and exit the stopwatch."""
         if self._running:
             self.stop()
         t = time.asctime(time.localtime(time.time()))
         self.output(PREFIX + "Finish: {}".format(t))
         return self
 
-    def get_sec(self):
+    def get_sec(self) -> (float, float):
+        """Get current time in seconds."""
         now = time.time()
         split = now - self._start_at
         total = now - self._initial
         return split, total
 
-    def get_hms(self):
+    def get_hms(self) -> (str, str):
+        """Get current time in format HH:mm:ss.SSS."""
         split, total = map(sec_to_hms, self.get_sec())
         return split, total
 
-    def restart(self):
+    def restart(self) -> None:
+        """Restart."""
         self._running = True
         self._initial = time.time()
         self._start_at = self._initial
 
-    def pause(self):
+    def pause(self) -> None:
+        """Pause."""
         if self._running:
             self._running = False
             self._pause_at = time.time()
 
-    def resume(self):
+    def resume(self) -> None:
+        """Resume."""
         if not self._running:
             self._running = True
             offset = time.time() - self._pause_at
             self._initial += offset
             self._start_at += offset
 
-    def split(self):
+    def split(self) -> None:
+        """Split."""
         current, total = self.get_hms()
         msg = PREFIX + "Split:  {} | {}".format(total, current)
         self.output(msg)
         self._start_at = time.time()
 
-    def stop(self):
+    def stop(self) -> None:
+        """Stop."""
         self._running = False
         current, total = self.get_hms()
         if self._start_at == self._initial:  # no splits
