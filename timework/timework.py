@@ -64,7 +64,7 @@ class Stopwatch(object):
         self.restart()
         return self
 
-    def __exit__(self):
+    def __exit__(self, exc_type, exc_value, exc_tb):
         """Stop and exit the stopwatch."""
         if self._running:
             self.stop()
