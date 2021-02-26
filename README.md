@@ -25,20 +25,24 @@ import timework as tw
 
 > measure execution time
 
-```
-Example:
-    with tw.Stopwatch() as s:
-        s.split()
-        s.stop()
-        s.restart()
-        s.pause()
-        s.resume()
-        s.get_sec()
-        s.get_hms()
+##### Example
 
-Functions:
-    get_sec()  get_hms()  restart()  pause()
-    resume()   split()    stop()
+```python
+with tw.Stopwatch() as s:
+    s.split()
+    s.stop()
+    s.restart()
+    s.pause()
+    s.resume()
+    s.get_sec()
+    s.get_hms()
+```
+
+##### Functions
+
+```
+get_sec()  get_hms()  restart()  pause()
+resume()   split()    stop()
 ```
 
 ### Decorator `@`
@@ -47,34 +51,42 @@ Functions:
 
 > measure execution time
 
-```
-Example:
-    @tw.timer(logging.warning)
-    def your_function():
-        ...
+##### Example
 
-Arguments:
-    output: A function object that specifies where to log messages.
-            For example: print. timework.nil does not log messages.
-    detail: A boolean value, whether to print start and end time.
-            This argument must be passed using keywords.
+```python
+@tw.timer(logging.warning)
+def your_function():
+    ...
+```
+
+##### Arguments
+
+```
+output: A function object that specifies where to log messages.
+        For example: print. timework.nil does not log messages.
+detail: A boolean value, whether to print start and end time.
+        This argument must be passed using keywords.
 ```
 
 #### timework.limit
 
 > limit execution time
 
-```
-Example:
-    @tw.limit(3)
-    def your_function():
-        ...
+##### Example
 
-Arguments:
-    timeout: This argument sets the timeout limit of the decorated
-             function. Once the run time of the process reaches
-             [timeout] seconds but not yet finishes, then raise
-             TimeoutException and stop the inner function.
+```python
+@tw.limit(3)
+def your_function():
+    ...
+```
+
+##### Arguments
+
+```
+timeout: This argument sets the timeout limit of the decorated
+         function. Once the run time of the process reaches
+         [timeout] seconds but not yet finishes, then raise
+         TimeoutException and stop the inner function.
 ```
 
 ## License

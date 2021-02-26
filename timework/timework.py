@@ -28,11 +28,11 @@ def hms_to_sec(hms: str) -> float:
 
 
 class TimeoutException(Exception):
-    """Exceptions for timeouts."""
+    """Exception for timeouts."""
 
 
 class Stopwatch(object):
-    """This class works just like a real stopwatch.
+    """Just like a real stopwatch.
 
     Example:
         with Stopwatch() as s:
@@ -50,7 +50,7 @@ class Stopwatch(object):
     """
 
     def __init__(self, output: Callable = print):
-        """Set parameters."""
+        """Set the stopwatch."""
         self.output = output
         self._initial = time.time()
         self._start_at = self._initial
