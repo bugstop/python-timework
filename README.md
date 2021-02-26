@@ -1,8 +1,8 @@
 # timework
 
-[![PyPI](https://img.shields.io/pypi/v/timework)](https://pypi.org/project/timework/)
-[![CodeFactor](https://www.codefactor.io/repository/github/bugstop/python-timework/badge)](https://www.codefactor.io/repository/github/bugstop/python-timework)
-[![Coverage Status](https://coveralls.io/repos/github/bugstop/python-timework/badge.svg?branch=master)](https://coveralls.io/github/bugstop/python-timework?branch=master)
+[![pypi](https://img.shields.io/pypi/v/timework)](https://pypi.org/project/timework/)
+[![codefactor](https://www.codefactor.io/repository/github/bugstop/python-timework/badge)](https://www.codefactor.io/repository/github/bugstop/python-timework)
+[![coverage](https://coveralls.io/repos/github/bugstop/python-timework/badge.svg?branch=master)](https://coveralls.io/github/bugstop/python-timework?branch=master)
 [![platform](https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-red)](https://github.com/bugstop/python-timework)
 
 measure / limit execution time using with-statements or decorators, cross-platform
